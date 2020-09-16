@@ -38,7 +38,8 @@
                             <RowDefinition Height="90"/>
                         </Grid.RowDefinitions>
                         <Label Content="Чат" FontSize="20" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-                        <TextBox Grid.Row="1" IsReadOnly="True" x:Name="chat" TextWrapping="WrapWithOverflow" VerticalScrollBarVisibility="Auto"/>
+                        <ListBox Grid.Row="1" ItemsSource="{Binding messages}"/>
+                        <!--<TextBox Grid.Row="1" IsReadOnly="True" TextWrapping="WrapWithOverflow" VerticalScrollBarVisibility="Auto"/>-->
                         <Grid Margin="5" Grid.Row="2">
                             <StackPanel>
                                 <Grid>
@@ -57,7 +58,7 @@
                                     <Label Grid.Column="0" Width="120" Content="Ключ шифрования:"/>
                                     <TextBox Grid.Column="1"/>
                                 </Grid>
-                                <Button Content="Отправить сообщение" Margin="5" Width="200"/>
+                                <Button Content="Отправить сообщение" Command="{Binding SendMessage}" Margin="5" Width="200"/>
                             </StackPanel>
                         </Grid>
                     </Grid>
@@ -137,12 +138,10 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Label Content="Имя:"/>
-                            <TextBox x:Name="tb" Grid.Column="1" MaxLength="25"/>
+                            <TextBox Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MaxLength="25"/>
                         </Grid>
-                        <Button Height="30" Content="Войти" Margin="5"/>
+                        <Button Command="{Binding Connect}" Height="30" Content="Войти" Margin="5"/>
                         <Label  HorizontalContentAlignment="Center" Content="Подключенные" FontSize="16" />
-
-
                     </StackPanel>
                     <ListView DisplayMemberPath="Name" Margin="5" Grid.Row="1" x:Name="onlineUsersList"/>
                 </Grid>
