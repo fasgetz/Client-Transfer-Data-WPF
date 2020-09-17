@@ -8,11 +8,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Client_Transfer_Data.MyService {
+namespace Client_Transfer_Data.ServiceFunctions {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="MyService.IService", CallbackContract=typeof(Client_Transfer_Data.MyService.IServiceCallback), SessionMode=System.ServiceModel.SessionMode.Required)]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceFunctions.IService", CallbackContract=typeof(Client_Transfer_Data.ServiceFunctions.IServiceCallback))]
     public interface IService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/ConnectOnServer", ReplyAction="http://tempuri.org/IService/ConnectOnServerResponse")]
@@ -57,12 +57,12 @@ namespace Client_Transfer_Data.MyService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IServiceChannel : Client_Transfer_Data.MyService.IService, System.ServiceModel.IClientChannel {
+    public interface IServiceChannel : Client_Transfer_Data.ServiceFunctions.IService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class ServiceClient : System.ServiceModel.DuplexClientBase<Client_Transfer_Data.MyService.IService>, Client_Transfer_Data.MyService.IService {
+    public partial class ServiceClient : System.ServiceModel.DuplexClientBase<Client_Transfer_Data.ServiceFunctions.IService>, Client_Transfer_Data.ServiceFunctions.IService {
         
         public ServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
                 base(callbackInstance) {

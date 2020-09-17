@@ -1,13 +1,9 @@
 ﻿using Client_Transfer_Data.ApplicationLogic;
 using Client_Transfer_Data.Model;
-using Client_Transfer_Data.MyService;
+using Client_Transfer_Data.ServiceFunctions;
 using Client_Transfer_Data.ViewModel.MVVM;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Client_Transfer_Data.ViewModel
@@ -69,13 +65,50 @@ namespace Client_Transfer_Data.ViewModel
                 OnPropertyChanged("UserName");
             }
         }
+
+        // Айпи адрес
+        private string _ipAddress;
+        public string ipAddress
+        {
+            get => _ipAddress;
+            set
+            {
+                _ipAddress = value;
+                OnPropertyChanged("ipAddress");
+            }
+        }
+
+        // Порт
+        private string _port;
+        public string port
+        {
+            get => _port;
+            set
+            {
+                _port = value;
+                OnPropertyChanged("port");
+            }
+        }
+
+        // Отправляемое сообщение
+        private string _messageEncrypt;
+        public string messageEncrypt
+        {
+            get => _messageEncrypt;
+            set
+            {
+                _messageEncrypt = value;
+                OnPropertyChanged("messageEncrypt");
+            }
+        }
         #endregion
 
         public MainPageViewModel()
         {
             logic = LogicApp.GetInstance();
+            ipAddress = "192.168.43.151";
+            port = "8000";
 
-            MessageBox.Show("test");
         }
 
         #region Команды
@@ -90,12 +123,12 @@ namespace Client_Transfer_Data.ViewModel
                     try
                     {
                         // Если клиент не подключен, то подключить
-                        if (client == null && myUser == null)
+                        if (client == null && myUser == null && !string.IsNullOrEmpty(ipAddress) && !string.IsNullOrEmpty(port))
                         {
                             // Подключение к серверу
                             client = new ServiceClient(new System.ServiceModel.InstanceContext(this),
-                                "WSDualHttpBinding_IService",
-                                "http://localhost:8000");
+                                "NetTcpBinding_IMyService",
+                                $"net.tcp://{ipAddress}:{port}");
 
                             // Подключаемся
                             myUser = logic.AuthorizeUser(UserName, ref client);
@@ -117,6 +150,7 @@ namespace Client_Transfer_Data.ViewModel
                         else
                         {
                             client.Disconnect(myUser.ID);
+                            onlineUsers = null;
                             client = null;
                             myUser = null;
                         }
@@ -146,7 +180,7 @@ namespace Client_Transfer_Data.ViewModel
                         // Если пользователь авторизован, то отправь сообщение
                         if (client != null && myUser != null)
                         {
-                            client.SendMessage("test", myUser.ID);
+                            client.SendMessage(messageEncrypt, myUser.ID);
                         }
 
 

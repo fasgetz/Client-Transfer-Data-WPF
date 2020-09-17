@@ -1,12 +1,5 @@
 ﻿using Client_Transfer_Data.Model;
-using Client_Transfer_Data.MyService;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace Client_Transfer_Data.ApplicationLogic
 {
@@ -40,7 +33,7 @@ namespace Client_Transfer_Data.ApplicationLogic
 
 
         // Авторизация пользователя
-        public User AuthorizeUser(string userName, ref ServiceClient client)
+        public User AuthorizeUser(string userName, ref ServiceFunctions.ServiceClient client)
         {
             User user = new User()
             {

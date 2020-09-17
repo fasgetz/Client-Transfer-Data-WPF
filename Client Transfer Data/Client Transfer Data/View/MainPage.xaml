@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:Client_Transfer_Data.View"
       xmlns:vm="clr-namespace:Client_Transfer_Data.ViewModel"
       mc:Ignorable="d" 
-      MinHeight="768" MinWidth="1024" Height="768" Width="1024"
+      MinHeight="768" MinWidth="1024"
       
       Title="MainPage">
     <Page.DataContext>
@@ -19,7 +19,7 @@
             </Style>
         </ResourceDictionary>
     </Page.Resources>
-    <Grid>
+    <Grid Margin="15">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="8*"/>
             <ColumnDefinition Width="2*"/>
@@ -48,7 +48,7 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <Label Grid.Column="0" Width="120" Content="Сообщение:"/>
-                                    <TextBox x:Name="messageBox" Grid.Column="1"/>
+                                    <TextBox Text="{Binding messageEncrypt}" Grid.Column="1"/>
                                 </Grid>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -56,7 +56,7 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <Label Grid.Column="0" Width="120" Content="Ключ шифрования:"/>
-                                    <TextBox Grid.Column="1"/>
+                                    <TextBox Text="{Binding keyEncrypt}" Grid.Column="1"/>
                                 </Grid>
                                 <Button Content="Отправить сообщение" Command="{Binding SendMessage}" Margin="5" Width="200"/>
                             </StackPanel>
@@ -122,7 +122,7 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Label Content="IP:"/>
-                            <TextBox Grid.Column="1" MaxLength="15"/>
+                            <TextBox Text="{Binding ipAddress}" Grid.Column="1" MaxLength="35"/>
                         </Grid>
                         <Grid Margin="5">
                             <Grid.ColumnDefinitions>
@@ -130,7 +130,7 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Label Content="Port:"/>
-                            <TextBox Grid.Column="1" MaxLength="5"/>
+                            <TextBox Text="{Binding port}" Grid.Column="1" MaxLength="5"/>
                         </Grid>
                         <Grid Margin="5">
                             <Grid.ColumnDefinitions>
@@ -143,7 +143,7 @@
                         <Button Command="{Binding Connect}" Height="30" Content="Войти" Margin="5"/>
                         <Label  HorizontalContentAlignment="Center" Content="Подключенные" FontSize="16" />
                     </StackPanel>
-                    <ListView DisplayMemberPath="Name" Margin="5" Grid.Row="1" x:Name="onlineUsersList"/>
+                    <ListView ItemsSource="{Binding onlineUsers}" DisplayMemberPath="Name" Margin="5" Grid.Row="1" x:Name="onlineUsersList"/>
                 </Grid>
 
             </Border>
