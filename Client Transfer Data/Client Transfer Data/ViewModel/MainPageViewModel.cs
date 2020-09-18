@@ -54,6 +54,8 @@ namespace Client_Transfer_Data.ViewModel
             }
         }
 
+        
+
         // Имя пользователя
         private string _UserName;
         public string UserName
@@ -65,6 +67,8 @@ namespace Client_Transfer_Data.ViewModel
                 OnPropertyChanged("UserName");
             }
         }
+
+        #region Конфигурация приложения
 
         // Айпи адрес
         private string _ipAddress;
@@ -90,6 +94,8 @@ namespace Client_Transfer_Data.ViewModel
             }
         }
 
+        #endregion
+
         // Отправляемое сообщение
         private string _messageEncrypt;
         public string messageEncrypt
@@ -101,10 +107,86 @@ namespace Client_Transfer_Data.ViewModel
                 OnPropertyChanged("messageEncrypt");
             }
         }
+
+        // Ключ шифрования
+        private string _encryptKey;
+        public string encryptKey
+        {
+            get => _encryptKey;
+            set
+            {
+                _encryptKey = value;
+                OnPropertyChanged("encryptKey");
+            }
+        }
+
+        // Выбранное сообщение в ListBox
+        private string _selectedMessage;
+        public string selectedMessage
+        {
+            get => _selectedMessage;
+            set
+            {
+                _selectedMessage = value;
+                if (value != null)
+                    getEncryptMessage = selectedMessage.Substring(selectedMessage.IndexOf(": ") + 2);
+                OnPropertyChanged("selectedMessage");
+            }
+        }
+
+        // Полученное зашифрованное сообщение
+        private string _getEncryptMessage;
+        public string getEncryptMessage
+        {
+            get => _getEncryptMessage;
+            set
+            {
+                _getEncryptMessage = value;
+                OnPropertyChanged("getEncryptMessage");
+            }
+        }
+
+        // Ключ для дешифрования
+        private string _decryptKey;
+        public string decryptKey
+        {
+            get => _decryptKey;
+            set
+            {
+                _decryptKey = value;
+                OnPropertyChanged("decryptKey");
+            }
+        }
+
+        // Результат дешифрованного сообщения
+        private string _decryptMessageResult;
+        public string decryptMessageResult
+        {
+            get => _decryptMessageResult;
+            set
+            {
+                _decryptMessageResult = value;
+                OnPropertyChanged("decryptMessageResult");
+            }
+        }
+
+        // Содержимое на кнопке войти/выйти
+        private string _isConnected;
+        public string isConnected
+        {
+            get => _isConnected;
+            set
+            {
+                _isConnected = value;
+                OnPropertyChanged("isConnected");
+            }
+        }
+
         #endregion
 
         public MainPageViewModel()
         {
+            isConnected = "Войти";
             logic = LogicApp.GetInstance();
             ipAddress = "192.168.43.151";
             port = "8000";
@@ -145,6 +227,7 @@ namespace Client_Transfer_Data.ViewModel
                                 // Получаем подключенных пользователей
                                 client.GetOnlineUsers();
                                 messages = new ObservableCollection<string>();
+                                isConnected = "Выйти";
                             }
                         }
                         else
@@ -153,6 +236,7 @@ namespace Client_Transfer_Data.ViewModel
                             onlineUsers = null;
                             client = null;
                             myUser = null;
+                            isConnected = "Войти";
                         }
                         
 
@@ -180,7 +264,16 @@ namespace Client_Transfer_Data.ViewModel
                         // Если пользователь авторизован, то отправь сообщение
                         if (client != null && myUser != null)
                         {
-                            client.SendMessage(messageEncrypt, myUser.ID);
+                            // Если ввели сообщение и ключ шифрования, то отправь сообщение подключенным клиентам
+                            if (!string.IsNullOrEmpty(messageEncrypt) && !string.IsNullOrEmpty(encryptKey))
+                            {
+                                // Получаем зашифрованное сообщение
+                                var messageEncr = EncryptionLibrary.EncryptionLib.Encrypt(messageEncrypt, encryptKey);
+
+                                // Передаем его
+                                client.SendMessage(messageEncr, myUser.ID);
+
+                            }
                         }
 
 
@@ -188,6 +281,34 @@ namespace Client_Transfer_Data.ViewModel
                     catch (Exception ex)
                     {
                         MessageBox.Show(ex.Message);
+                    }
+                    finally
+                    {
+                        messageEncrypt = string.Empty;
+                    }
+
+                });
+            }
+        }
+
+        // Дешифровать сообщение
+        public DelegateCommand EncryptMessage
+        {
+            get
+            {
+                return new DelegateCommand(obj =>
+                {
+                    try
+                    {
+                        // Если ввели зашифрованное сообщение и ключ дешифрования, то дешифруй сообщение
+                        if (!string.IsNullOrEmpty(getEncryptMessage) && !string.IsNullOrEmpty(decryptKey))
+                        {
+                            decryptMessageResult = EncryptionLibrary.EncryptionLib.Decrypt(getEncryptMessage, decryptKey);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        decryptMessageResult = "Ошибка дешифрования!";
                     }
 
                 });
@@ -201,7 +322,7 @@ namespace Client_Transfer_Data.ViewModel
         public void MsgCallback(string msg)
         {
             try
-            {
+            {                
                 messages.Add(msg);
             }
             catch(Exception ex)

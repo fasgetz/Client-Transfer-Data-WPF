@@ -38,8 +38,8 @@
                             <RowDefinition Height="90"/>
                         </Grid.RowDefinitions>
                         <Label Content="Чат" FontSize="20" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-                        <ListBox Grid.Row="1" ItemsSource="{Binding messages}"/>
-                        <!--<TextBox Grid.Row="1" IsReadOnly="True" TextWrapping="WrapWithOverflow" VerticalScrollBarVisibility="Auto"/>-->
+                        <ListBox Grid.Row="1" ItemsSource="{Binding messages}" SelectedItem="{Binding selectedMessage, UpdateSourceTrigger=PropertyChanged}">
+                        </ListBox>
                         <Grid Margin="5" Grid.Row="2">
                             <StackPanel>
                                 <Grid>
@@ -53,10 +53,11 @@
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="130"/>
-                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="596*"/>
+                                        <ColumnDefinition Width="59*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Label Grid.Column="0" Width="120" Content="Ключ шифрования:"/>
-                                    <TextBox Text="{Binding keyEncrypt}" Grid.Column="1"/>
+                                    <Label Grid.Column="0" Width="120" Content="Ключ шифрования:" Margin="5,0"/>
+                                    <TextBox Text="{Binding encryptKey}" Grid.Column="1" Grid.ColumnSpan="2"/>
                                 </Grid>
                                 <Button Content="Отправить сообщение" Command="{Binding SendMessage}" Margin="5" Width="200"/>
                             </StackPanel>
@@ -91,7 +92,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Label VerticalAlignment="Center" Content="Зашифрованное сообщение:"/>
-                                <TextBox VerticalContentAlignment="Center" Grid.Column="1" TextWrapping="WrapWithOverflow"/>
+                                <TextBox Grid.Column="1" Text="{Binding getEncryptMessage, UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
                             <Grid Grid.Row="1">
                                 <Grid.ColumnDefinitions>
@@ -99,12 +100,12 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Label VerticalAlignment="Center" Content="Ключ шифрования:"/>
-                                <TextBox VerticalContentAlignment="Center" Grid.Column="1" TextWrapping="WrapWithOverflow"/>
+                                <TextBox VerticalContentAlignment="Center" Grid.Column="1" TextWrapping="WrapWithOverflow" Text="{Binding decryptKey}"/>
                             </Grid>
-                            <Button Grid.Row="2" Margin="10" Width="200" Content="Дешифровать"/>
+                            <Button Command="{Binding EncryptMessage}" Grid.Row="2" Margin="10" Width="200" Content="Дешифровать"/>
                         </Grid>
                     </Grid>
-                    <TextBox Grid.Row="2" Margin="10" IsReadOnly="True"/>
+                    <TextBox Text="{Binding decryptMessageResult}" Grid.Row="2" Margin="10" IsReadOnly="True"/>
                 </Grid>
             </Grid>
         </Grid>
@@ -140,7 +141,7 @@
                             <Label Content="Имя:"/>
                             <TextBox Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MaxLength="25"/>
                         </Grid>
-                        <Button Command="{Binding Connect}" Height="30" Content="Войти" Margin="5"/>
+                        <Button Command="{Binding Connect}" Height="30" Content="{Binding isConnected}" Margin="5"/>
                         <Label  HorizontalContentAlignment="Center" Content="Подключенные" FontSize="16" />
                     </StackPanel>
                     <ListView ItemsSource="{Binding onlineUsers}" DisplayMemberPath="Name" Margin="5" Grid.Row="1" x:Name="onlineUsersList"/>
