@@ -21,133 +21,154 @@
     </Page.Resources>
     <Grid Margin="15">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="6*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-        <Grid>
+        <Grid Grid.Column="0" Margin="5 0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="10*"/>
-                <RowDefinition Height="4*"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Grid>
-                <Border BorderThickness="0 0 0 1" BorderBrush="Black">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="40"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="90"/>
-                        </Grid.RowDefinitions>
-                        <Label Content="Чат" FontSize="20" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-                        <ListBox Grid.Row="1" ItemsSource="{Binding messages}" SelectedItem="{Binding selectedMessage, UpdateSourceTrigger=PropertyChanged}">
-                        </ListBox>
-                        <Grid Margin="5" Grid.Row="2">
-                            <StackPanel>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="130"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Label Grid.Column="0" Width="120" Content="Сообщение:"/>
-                                    <TextBox Text="{Binding messageEncrypt}" Grid.Column="1"/>
-                                </Grid>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="130"/>
-                                        <ColumnDefinition Width="596*"/>
-                                        <ColumnDefinition Width="59*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Label Grid.Column="0" Width="120" Content="Ключ шифрования:" Margin="5,0"/>
-                                    <TextBox Text="{Binding encryptKey}" Grid.Column="1" Grid.ColumnSpan="2"/>
-                                </Grid>
-                                <Button Content="Отправить сообщение" Command="{Binding SendMessage}" Margin="5" Width="200"/>
-                            </StackPanel>
-                        </Grid>
-                    </Grid>
-                </Border>
-            </Grid>
+            <Label Content="Менеджер файлов" FontSize="20" HorizontalAlignment="Center"/>
             <Grid Grid.Row="1">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                </Grid>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="100"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Label  Content="Дешифрование данных" FontSize="20" HorizontalContentAlignment="Center"/>
-                    <Grid Grid.Row="1">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="40"/>
-                            </Grid.RowDefinitions>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="180"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Label VerticalAlignment="Center" Content="Зашифрованное сообщение:"/>
-                                <TextBox Grid.Column="1" Text="{Binding getEncryptMessage, UpdateSourceTrigger=PropertyChanged}"/>
-                            </Grid>
-                            <Grid Grid.Row="1">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="180"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Label VerticalAlignment="Center" Content="Ключ шифрования:"/>
-                                <TextBox VerticalContentAlignment="Center" Grid.Column="1" TextWrapping="WrapWithOverflow" Text="{Binding decryptKey}"/>
-                            </Grid>
-                            <Button Command="{Binding EncryptMessage}" Grid.Row="2" Margin="10" Width="200" Content="Дешифровать"/>
-                        </Grid>
-                    </Grid>
-                    <TextBox Text="{Binding decryptMessageResult}" Grid.Row="2" Margin="10" IsReadOnly="True"/>
-                </Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="80"/>
+                </Grid.RowDefinitions>
+                <ListBox ItemsSource="{Binding GetFiles}"/>
+                <StackPanel Grid.Row="1" >
+                    <Button Height="30"  Margin="5" Content="Отправить файл" Command="{Binding SendFile}"/>
+                    <Button Height="30" Margin="5" Content="Дешифровать файл" Command="{Binding DecryptFile}"/>
+                </StackPanel>
             </Grid>
         </Grid>
         <Grid Grid.Column="1">
-            <Border Margin="5 0 0 0" BorderThickness="1 0 0 0" BorderBrush="Black">
-                <Grid>
+            <Border BorderThickness="1 0"  BorderBrush="Black">
+                <Grid Margin="5 0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="180"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="10*"/>
+                        <RowDefinition Height="4*"/>
                     </Grid.RowDefinitions>
-                    <StackPanel>
-                        <Grid Margin="5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="40"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Label Content="IP:"/>
-                            <TextBox Text="{Binding ipAddress}" Grid.Column="1" MaxLength="35"/>
+                    <Grid>
+                        <Border BorderBrush="Black">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="90"/>
+                                </Grid.RowDefinitions>
+                                <Label Content="Чат" FontSize="20" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                                <ListBox Grid.Row="1" ItemsSource="{Binding messages}" SelectedItem="{Binding selectedMessage, UpdateSourceTrigger=PropertyChanged}">
+                                </ListBox>
+                                <Grid Margin="5" Grid.Row="2">
+                                    <StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="130"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Width="120" Content="Сообщение:"/>
+                                            <TextBox Text="{Binding messageEncrypt}" Grid.Column="1"/>
+                                        </Grid>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="130"/>
+                                                <ColumnDefinition Width="596*"/>
+                                                <ColumnDefinition Width="59*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Width="120" Content="Ключ шифрования:" Margin="5,0"/>
+                                            <TextBox Text="{Binding encryptKey}" Grid.Column="1" Grid.ColumnSpan="2"/>
+                                        </Grid>
+                                        <Button Content="Отправить сообщение" Command="{Binding SendMessage}" Margin="5" Width="200"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
                         </Grid>
-                        <Grid Margin="5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="40"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Label Content="Port:"/>
-                            <TextBox Text="{Binding port}" Grid.Column="1" MaxLength="5"/>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="100"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Label  Content="Дешифрование сообщения" FontSize="20" HorizontalContentAlignment="Center"/>
+                            <Grid Grid.Row="1">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="40"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="180"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label VerticalAlignment="Center" Content="Зашифрованное сообщение:"/>
+                                        <TextBox Grid.Column="1" Text="{Binding getEncryptMessage, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="180"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label VerticalAlignment="Center" Content="Ключ шифрования:"/>
+                                        <TextBox VerticalContentAlignment="Center" Grid.Column="1" TextWrapping="WrapWithOverflow" Text="{Binding decryptKey}"/>
+                                    </Grid>
+                                    <Button Command="{Binding EncryptMessage}" Grid.Row="2" Margin="10" Width="200" Content="Дешифровать сообщение"/>
+                                </Grid>
+                            </Grid>
+                            <TextBox Text="{Binding decryptMessageResult}" Grid.Row="2" Margin="10" IsReadOnly="True"/>
                         </Grid>
-                        <Grid Margin="5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="40"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Label Content="Имя:"/>
-                            <TextBox Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MaxLength="25"/>
-                        </Grid>
-                        <Button Command="{Binding Connect}" Height="30" Content="{Binding isConnected}" Margin="5"/>
-                        <Label  HorizontalContentAlignment="Center" Content="Подключенные" FontSize="16" />
-                    </StackPanel>
-                    <ListView ItemsSource="{Binding onlineUsers}" DisplayMemberPath="Name" Margin="5" Grid.Row="1" x:Name="onlineUsersList"/>
+                    </Grid>
                 </Grid>
-
             </Border>
+        </Grid>
+        <Grid Grid.Column="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="180"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel>
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="IP:"/>
+                        <TextBox Text="{Binding ipAddress}" Grid.Column="1" MaxLength="35"/>
+                    </Grid>
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Port:"/>
+                        <TextBox Text="{Binding port}" Grid.Column="1" MaxLength="5"/>
+                    </Grid>
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Имя:"/>
+                        <TextBox Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MaxLength="25"/>
+                    </Grid>
+                    <Button Command="{Binding Connect}" Height="30" Content="{Binding isConnected}" Margin="5"/>
+                    <Label  HorizontalContentAlignment="Center" Content="Подключенные" FontSize="16" />
+                </StackPanel>
+                <ListView ItemsSource="{Binding onlineUsers}" DisplayMemberPath="Name" Margin="5" Grid.Row="1" x:Name="onlineUsersList"/>
+
+            </Grid>
 
         </Grid>
     </Grid>

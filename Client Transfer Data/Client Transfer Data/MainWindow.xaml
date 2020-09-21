@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client_Transfer_Data"
         mc:Ignorable="d"         
-        Title="MainWindow"  WindowStartupLocation="CenterScreen" MinHeight="840" MinWidth="1024" Height="840" Width="1024">
+        Title="Program"  WindowStartupLocation="CenterScreen" MinHeight="840" MinWidth="1024" Height="840" Width="1024">
     <Grid>
         <Frame x:Name="myframe"/>
     </Grid>

@@ -38,10 +38,25 @@ namespace Client_Transfer_Data.ServiceFunctions {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService/SendMessage")]
         System.Threading.Tasks.Task SendMessageAsync(string Message, int UserID);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService/SendFile")]
+        void SendFile(string file, int UserID);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService/SendFile")]
+        System.Threading.Tasks.Task SendFileAsync(string file, int UserID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/UploadFile", ReplyAction="http://tempuri.org/IService/UploadFileResponse")]
+        System.IO.Stream UploadFile(string path);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/UploadFile", ReplyAction="http://tempuri.org/IService/UploadFileResponse")]
+        System.Threading.Tasks.Task<System.IO.Stream> UploadFileAsync(string path);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IServiceCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService/FileCallback")]
+        void FileCallback(string file);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IService/MsgCallback")]
         void MsgCallback(string msg);
@@ -114,6 +129,22 @@ namespace Client_Transfer_Data.ServiceFunctions {
         
         public System.Threading.Tasks.Task SendMessageAsync(string Message, int UserID) {
             return base.Channel.SendMessageAsync(Message, UserID);
+        }
+        
+        public void SendFile(string file, int UserID) {
+            base.Channel.SendFile(file, UserID);
+        }
+        
+        public System.Threading.Tasks.Task SendFileAsync(string file, int UserID) {
+            return base.Channel.SendFileAsync(file, UserID);
+        }
+        
+        public System.IO.Stream UploadFile(string path) {
+            return base.Channel.UploadFile(path);
+        }
+        
+        public System.Threading.Tasks.Task<System.IO.Stream> UploadFileAsync(string path) {
+            return base.Channel.UploadFileAsync(path);
         }
     }
 }

@@ -1,0 +1,40 @@
+﻿<Window x:Class="Client_Transfer_Data.View.DecryptFileWIndow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client_Transfer_Data.View"
+        mc:Ignorable="d"
+        Title="Окно дешифрования файлов" Height="200" Width="500" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="30"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <StackPanel Margin="10">
+            <Button Command="{Binding ChooseFile}" Content="Выберите файл"/>
+            <StackPanel Margin="0 5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Путь файла"/>
+                    <TextBox Text="{Binding FilePath, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+            <StackPanel Margin="0 5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Ключ дешифрования"/>
+                    <TextBox Text="{Binding KeyDecrypt}" Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+            <Button Command="{Binding DecryptFile}" Content="Дешифровать"/>
+        </StackPanel>
+    </Grid>
+</Window>

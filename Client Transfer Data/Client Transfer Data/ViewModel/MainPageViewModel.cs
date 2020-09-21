@@ -1,9 +1,14 @@
 ﻿using Client_Transfer_Data.ApplicationLogic;
 using Client_Transfer_Data.Model;
 using Client_Transfer_Data.ServiceFunctions;
+using Client_Transfer_Data.View;
 using Client_Transfer_Data.ViewModel.MVVM;
+using EncryptionLibrary;
+using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 
 namespace Client_Transfer_Data.ViewModel
@@ -14,6 +19,19 @@ namespace Client_Transfer_Data.ViewModel
 
         // Логика приложения
         LogicApp logic;
+
+        // Полученный список файлов
+        private ObservableCollection<string> _GetFiles;
+        public ObservableCollection<string> GetFiles
+        {
+            get => _GetFiles;
+            set
+            {
+                _GetFiles = value;
+                OnPropertyChanged("GetFiles");
+            }
+        }
+
 
         // Онлайн пользователи
         private ObservableCollection<User> _onlineUsers;
@@ -190,10 +208,78 @@ namespace Client_Transfer_Data.ViewModel
             logic = LogicApp.GetInstance();
             ipAddress = "192.168.43.151";
             port = "8000";
-
+            GetFiles = new ObservableCollection<string>();
         }
 
         #region Команды
+
+        /// <summary>
+        /// Команда на отправку файла
+        /// </summary>
+        public DelegateCommand SendFile
+        {
+            get
+            {
+                return new DelegateCommand(obj =>
+                {
+                    try
+                    {
+                        // Если пользователь авторизован, то отправь сообщение
+                        if (client != null && myUser != null)
+                        {
+                            var window = new SendFileWindow(logic, myUser);
+
+
+                            if (window.ShowDialog() == true)
+                            {
+                                var file = window.file; // Полученный файл из window
+                                GetFiles.Add(file.FileName);
+
+
+                                // Далее преобразуем в json
+                                string serialized = JsonConvert.SerializeObject(file);
+
+                                // Далее шифруем файл
+                                string Encrypted = EncryptionLib.Encrypt(serialized, window.KeyEncrypt);
+
+                                // Далее отправляем JSON файл
+                                client.SendFile(Encrypted, myUser.ID);
+
+                                MessageBox.Show($"Файл {file.FileName} отправлен");
+                            }
+
+
+                        }
+                        else
+                        {
+                            MessageBox.Show("Подключитесь к серверу!");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    finally
+                    {
+                        messageEncrypt = string.Empty;
+                    }
+
+                });
+            }
+        }
+
+        // Дешифровать файл
+        public DelegateCommand DecryptFile
+        {
+            get
+            {
+                return new DelegateCommand(obj =>
+                {
+                    // Вызываем окно дешифрования сообщения
+                    new DecryptFileWIndow().ShowDialog();
+                });
+            }
+        }
 
         // Подключение к серверу
         public DelegateCommand Connect
@@ -205,7 +291,7 @@ namespace Client_Transfer_Data.ViewModel
                     try
                     {
                         // Если клиент не подключен, то подключить
-                        if (client == null && myUser == null && !string.IsNullOrEmpty(ipAddress) && !string.IsNullOrEmpty(port))
+                        if (myUser == null && !string.IsNullOrEmpty(ipAddress) && !string.IsNullOrEmpty(port))
                         {
                             // Подключение к серверу
                             client = new ServiceClient(new System.ServiceModel.InstanceContext(this),
@@ -274,6 +360,10 @@ namespace Client_Transfer_Data.ViewModel
                                 client.SendMessage(messageEncr, myUser.ID);
 
                             }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Подключитесь к серверу!");
                         }
 
 
@@ -348,7 +438,61 @@ namespace Client_Transfer_Data.ViewModel
             onlineUsers = new ObservableCollection<User>(logic.GetOnlineUsers(usersOnlineJson));
         }
 
+        /// <summary>
+        /// Метод получения файла
+        /// </summary>
+        /// <param name="file">файл</param>
+        public void FileCallback(string file)
+        {
+            string message = $"Принять файл?";
+            string caption = "Выберите действие";
+            MessageBoxButton buttons = MessageBoxButton.YesNo;
+
+            
+            var result = MessageBox.Show(message, caption, buttons,
+            MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                using (FileServiceClient.FileServiceClient clientFile = new FileServiceClient.FileServiceClient())
+                {
+                    var array = clientFile.UploadFile(file);
+
+                    SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+
+                    if (saveFileDialog1.ShowDialog() == true)
+                    {
+
+                        using (Stream myfile = File.Create(saveFileDialog1.FileName))
+                        {
+                            CopyStream(array, myfile);
+                        }
+                    }
+
+
+                }
+                
+
+
+            }
+        }
+
         #endregion
+
+
+        /// <summary>
+        /// Copies the contents of input to output. Doesn't close either stream.
+        /// </summary>
+        public static void CopyStream(Stream input, Stream output)
+        {
+            byte[] buffer = new byte[8 * 1024];
+            int len;
+            while ((len = input.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                output.Write(buffer, 0, len);
+            }
+        }
 
     }
 }
