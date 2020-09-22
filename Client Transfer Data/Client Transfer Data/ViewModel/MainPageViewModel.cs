@@ -454,7 +454,12 @@ namespace Client_Transfer_Data.ViewModel
 
             if (result == MessageBoxResult.Yes)
             {
-                using (FileServiceClient.FileServiceClient clientFile = new FileServiceClient.FileServiceClient())
+
+                using (FileServiceClient.FileServiceClient clientFile = new FileServiceClient.FileServiceClient
+                    (
+                    "BasicHttpBinding_IFileService",
+                    $"http://{ipAddress}:{Convert.ToInt32(port) + 1}")
+                    )
                 {
                     var array = clientFile.UploadFile(file);
 
