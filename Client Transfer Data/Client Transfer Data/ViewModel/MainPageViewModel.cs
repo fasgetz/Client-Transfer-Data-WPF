@@ -206,8 +206,8 @@ namespace Client_Transfer_Data.ViewModel
         {
             isConnected = "Войти";
             logic = LogicApp.GetInstance();
-            ipAddress = "192.168.43.151";
-            port = "8000";
+            //ipAddress = "192.168.43.151";
+            //port = "8000";
             GetFiles = new ObservableCollection<string>();
         }
 
